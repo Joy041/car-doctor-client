@@ -58,6 +58,7 @@ const Register = () => {
                 userProfile(loggedUser, name)
                 userVerification(loggedUser)
                 form.reset()
+                navigate('/login')
             })
             .catch(error => {
                 setError(error)
@@ -80,25 +81,25 @@ const Register = () => {
 
     const handleGoogleRegister = () => {
         googleLogin()
-        .then(result => {
-            const loggedUser = result.user;
-            console.log(loggedUser)
-            setSuccess('Login Successful')
-            navigate('/login')
-        })
-        .catch(error => setError(error.message))
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser)
+                setSuccess('Login Successful')
+                navigate('/login')
+            })
+            .catch(error => setError(error.message))
     }
 
 
     const handleGithubRegister = () => {
         githubLogin()
-        .then(result => {
-            const loggedUser = result.user;
-            console.log(loggedUser)
-            setSuccess('Login Successful')
-            navigate('/login')
-        })
-        .catch(error => setError(error.message))
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser)
+                setSuccess('Login Successful')
+                navigate('/login')
+            })
+            .catch(error => setError(error.message))
     }
 
     return (

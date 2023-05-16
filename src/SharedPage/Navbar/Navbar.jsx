@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import logo from '../../assets/logo.svg'
 import { useContext } from "react";
 import { CarContext } from "../../Routes/AuthProvider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 const Navbar = () => {
@@ -10,7 +11,12 @@ const Navbar = () => {
     const handleLogout = () => {
         logout()
             .then(() => {
-                alert('Logout successful')
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Logout Successful',
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                  })
             })
     }
 
@@ -18,6 +24,9 @@ const Navbar = () => {
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/about'}>About</Link></li>
         <li><Link to={'/service'}>Service</Link></li>
+        {
+            user?.email ? <li><Link to={'/bookings'}>My Booking</Link></li>  : ''
+        }
         <li><Link to={'/blog'}>Blog</Link></li>
         <li><Link to={'/contact'}>Contact</Link></li>
     </>

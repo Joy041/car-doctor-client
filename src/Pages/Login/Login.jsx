@@ -3,11 +3,11 @@ import img from '../../assets/images/login/login.svg';
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CarContext } from "../../Routes/AuthProvider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 const Login = () => {
     const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
     const emailRef = useRef();
     const { login, passwordReset, googleLogin, githubLogin } = useContext(CarContext);
     const navigate = useNavigate();
@@ -24,15 +24,21 @@ const Login = () => {
         console.log(name, email, password, confirm)
 
         setError('')
-        setSuccess('')
 
         login(email, password)
             .then(result => {
                 const loggedUser = result.user;
-                setSuccess('Login successful')
-                form.reset()
-                navigate(from, { replace: true })
                 console.log(loggedUser)
+                form.reset()
+                
+                navigate(from, { replace: true })
+
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Login successful',
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                })
             })
             .catch(error => setError(error.message))
     }
@@ -50,24 +56,37 @@ const Login = () => {
 
     const handleGoogleLogin = () => {
         googleLogin()
-        .then(result => {
-            const loggedUser = result.user;
-            setSuccess('Login Successful')
-            navigate(from, { replace: true })
-            console.log(loggedUser)
-        })
-        .catch(error => setError(error.message))
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser)
+                navigate(from, { replace: true })
+
+
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Login successful',
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                })
+            })
+            .catch(error => setError(error.message))
     }
 
     const handleGithubLogin = () => {
         githubLogin()
-        .then(result => {
-            const loggedUser = result.user;
-            setSuccess('Login Successful')
-            navigate(from, { replace: true })
-            console.log(loggedUser)
-        })
-        .catch(error => setError(error.message))
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser)
+                navigate(from, { replace: true })
+
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Login successful',
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                })
+            })
+            .catch(error => setError(error.message))
     }
 
     return (
@@ -85,7 +104,7 @@ const Login = () => {
                                     <span className="label-text">Email</span>
                                 </label>
                                 <input type="text" placeholder="email" name='email' ref={emailRef} required className="input input-bordered" />
-                                
+
                             </div>
                             <div className="form-control">
                                 <label className="label">
@@ -98,7 +117,6 @@ const Login = () => {
                             </div>
                             <div className="form-control mt-6">
                                 <p className='text-danger'>{error}</p>
-                                <p className='text-success'>{success}</p>
                                 <button className="btn btn-primary">Login</button>
                             </div>
                             <div className='form-control'>

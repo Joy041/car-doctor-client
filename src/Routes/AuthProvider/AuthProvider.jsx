@@ -8,17 +8,17 @@ const auth = getAuth(app)
 const googleProvider = new GoogleAuthProvider();
 const githubProvider = new GithubAuthProvider()
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(true)
 
     const register = (email, password) => {
         setLoading(true)
         return createUserWithEmailAndPassword(auth, email, password)
-    }  
+    }
 
     const profile = (user, name) => {
-        return updateProfile(user, {displayName: name})
+        return updateProfile(user, { displayName: name })
     }
 
     const verification = (user) => {
@@ -38,6 +38,26 @@ const AuthProvider = ({children}) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
             setLoading(false)
+
+            if (currentUser && currentUser.email) {
+                const userEmail = { email: currentUser.email };
+                
+
+                fetch('https://car-doctor-server2.vercel.app/tokens', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(userEmail)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        localStorage.setItem('car-doctor-web-token', data.token)
+                    })
+            }
+            else{
+                localStorage.removeItem('car-doctor-web-token')
+            }
         });
         return () => {
             unsubscribe();
@@ -46,17 +66,18 @@ const AuthProvider = ({children}) => {
     }, [])
 
     const logout = () => {
+        setLoading(true)
         return signOut(auth)
     }
 
     const googleLogin = () => {
         return signInWithPopup(auth, googleProvider)
-     }
- 
-     const githubLogin = () => {
-       return signInWithPopup(auth, githubProvider)
-     }
-    
+    }
+
+    const githubLogin = () => {
+        return signInWithPopup(auth, githubProvider)
+    }
+
 
     const contextValue = {
         register,
